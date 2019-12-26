@@ -59,12 +59,12 @@
     },
     data: () => ({
       valid: true,
-      name: '',
+      name: 'pasha', //TODO: delete default value
       nameRules: [
         v => !!v || 'Введите имя',
         v => (v && v.length <= 10) || 'Имя не должно превышать 16 символов'
       ],
-      room: '',
+      room: '1234', //TODO: delete default value
       roomRules: [
         v => !!v || 'Введите комнату'
       ]
@@ -78,8 +78,15 @@
             room: this.room
           };
 
-          this.setUser(user);
-          this.$router.push('/chat')
+          this.$socket.emit('userJoined', user, data => {
+            if (typeof data === 'string') {
+              console.error(data);
+            } else {
+              user.id = data.userId;
+              this.setUser(user);
+              this.$router.push('/chat');
+            }
+          });
         }
       }
     }
