@@ -1,7 +1,10 @@
 <template>
   <v-app app dark>
-    <h1>Title</h1>
-    <nuxt/>
+    <v-app-bar app dense/>
+
+    <v-content>
+      <nuxt/>
+    </v-content>
   </v-app>
 </template>
 
