@@ -9,8 +9,8 @@
         <v-subheader>Список людей в комнате</v-subheader>
 
         <v-list-item
-          v-for="user in users"
-          :key="user.id"
+          v-for="u in users"
+          :key="u.id"
           @click.prevent=""
         >
           <!--<v-list-item-avatar>
@@ -18,11 +18,11 @@
           </v-list-item-avatar>-->
 
           <v-list-item-content>
-            <v-list-item-title v-text="user.name"/>
+            <v-list-item-title v-text="u.name"/>
           </v-list-item-content>
 
           <v-list-item-icon>
-            <v-icon :color="user.id === 2 ? 'primary' : 'grey'">chat_bubble</v-icon>
+            <v-icon :color="u.id === user.id ? 'primary' : 'grey'">chat_bubble</v-icon>
           </v-list-item-icon>
         </v-list-item>
       </v-list>
@@ -51,20 +51,17 @@
   export default {
     data() {
       return {
-        drawer: false,
-        users: [
-          { id: 1, name: 'Andrey' },
-          { id: 2, name: 'Katya' },
-          { id: 3, name: 'Dima' }
-        ]
+        drawer: false
       };
     },
-    computed: mapState(['user']),
+    computed: mapState(['user', 'users']),
     methods: {
       ...mapMutations(['clearData']),
       exit() {
-        this.$router.push('/?message=leftChat');
-        this.clearData();
+        this.$socket.emit('userLeft', this.user.id, () => {
+          this.$router.push('/?message=leftChat');
+          this.clearData();
+        });
       }
     }
   };

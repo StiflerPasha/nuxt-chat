@@ -48,6 +48,7 @@
   import { mapMutations } from 'vuex';
 
   export default {
+    //TODO: Add toasts
     layout: 'empty',
     head: {
       title: 'Добро пожаловать в Nuxt чат'
@@ -59,12 +60,12 @@
     },
     data: () => ({
       valid: true,
-      name: 'pasha', //TODO: delete default value
+      name: '',
       nameRules: [
         v => !!v || 'Введите имя',
         v => (v && v.length <= 10) || 'Имя не должно превышать 16 символов'
       ],
-      room: '1234', //TODO: delete default value
+      room: '',
       roomRules: [
         v => !!v || 'Введите комнату'
       ]
