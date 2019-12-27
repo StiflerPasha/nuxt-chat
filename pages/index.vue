@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="login" xs12 column justify-center align-center>
+  <v-layout xs12 column justify-center align-center>
     <v-flex>
       <v-card min-width="320">
         <v-card-title>
@@ -122,7 +122,5 @@
 </script>
 
 <style lang="scss" scoped>
-  .login {
-    margin-top: 100px;
-  }
+
 </style>
