@@ -1,10 +1,9 @@
 <template>
-  <v-layout column justify-center align-center>
-    <v-flex xs12 sm8>
-
-      <v-card min-width="350">
+  <v-layout class="login" xs12 column justify-center align-center>
+    <v-flex>
+      <v-card min-width="320">
         <v-card-title>
-          <h1>Nuxt чат</h1>
+          <h2>Nuxt чат</h2>
         </v-card-title>
 
         <v-card-text>
@@ -18,6 +17,7 @@
               :counter="16"
               :rules="nameRules"
               label="Ваше имя"
+              solo-inverted
               required
             />
 
@@ -25,21 +25,35 @@
               v-model="room"
               :rules="roomRules"
               label="Введите комнату"
+              solo-inverted
               required
             />
 
             <v-btn
               :disabled="!valid"
               color="primary"
-              class="mr-4"
               @click="submit"
             >
               Войти
             </v-btn>
           </v-form>
         </v-card-text>
-
       </v-card>
+
+      <v-snackbar
+        v-model="snackbar"
+        :timeout="5000"
+        top
+      >
+        {{ message }}
+        <v-btn
+          color="pink"
+          text
+          @click="snackbar = false"
+        >
+          Закрыть
+        </v-btn>
+      </v-snackbar>
     </v-flex>
   </v-layout>
 </template>
@@ -48,7 +62,6 @@
   import { mapMutations } from 'vuex';
 
   export default {
-    //TODO: Add toasts
     layout: 'empty',
     head: {
       title: 'Добро пожаловать в Nuxt чат'
@@ -58,18 +71,22 @@
         console.log('Socket connected');
       }
     },
-    data: () => ({
-      valid: true,
-      name: '',
-      nameRules: [
-        v => !!v || 'Введите имя',
-        v => (v && v.length <= 10) || 'Имя не должно превышать 16 символов'
-      ],
-      room: '',
-      roomRules: [
-        v => !!v || 'Введите комнату'
-      ]
-    }),
+    data() {
+      return {
+        snackbar: false,
+        message: '',
+        valid: true,
+        name: '',
+        nameRules: [
+          v => !!v || 'Введите имя',
+          v => (v && v.length <= 16) || 'Имя не должно превышать 16 символов'
+        ],
+        room: '',
+        roomRules: [
+          v => !!v || 'Введите комнату'
+        ]
+      };
+    },
     methods: {
       ...mapMutations(['setUser']),
       submit() {
@@ -90,10 +107,22 @@
           });
         }
       }
+    },
+    mounted() {
+      const { message } = this.$route.query;
+      if (message === 'noUser') {
+        this.message = 'Пользователь не найден';
+      } else if (message === 'leftChat') {
+        this.message = 'Вы вышли из чата';
+      }
+
+      this.snackbar = !!this.message;
     }
   };
 </script>
 
 <style lang="scss" scoped>
-
+  .login {
+    margin-top: 100px;
+  }
 </style>
