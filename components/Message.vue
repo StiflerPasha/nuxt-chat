@@ -42,13 +42,14 @@
   }
 
   .mes {
-    padding: 1rem;
-    width: 60%;
+    padding: .5rem;
+    min-width: 20%;
     margin: 0 1rem 1rem;
     box-shadow: 0 1px 0 0 rgba(50, 50, 50, 0.3);
     border-radius: 4px;
     background: #1976d2;
     position: relative;
+    align-self: flex-start;
 
     p {
       margin-bottom: 0;
