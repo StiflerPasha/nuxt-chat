@@ -2,7 +2,7 @@
   <v-layout column justify-center align-center>
     <v-flex xs12 sm8>
 
-      <v-card min-width="400">
+      <v-card min-width="350">
         <v-card-title>
           <h1>Nuxt чат</h1>
         </v-card-title>
