@@ -8,7 +8,7 @@ const m = (name, text, id) => ({ name, text, id });
 io.on('connection', socket => {
   socket.on('userJoined', (data, cb) => {
     if (!data.name || !data.room) {
-      return cb('Данные некоректны');
+      return cb('Данные некорректны');
     }
     
     socket.join(data.room);
@@ -23,14 +23,15 @@ io.on('connection', socket => {
     cb({ userId: socket.id });
     io.to(data.room).emit('updateUsers', users.getByRoom(data.room));
     socket.emit('newMessage', m('admin', `Добро пожаловать ${data.name}`));
-    socket.broadcast.to(data.room)
+    socket.broadcast
+      .to(data.room)
       .emit('newMessage', m('admin', `Пользователь ${data.name} зашел.`));
   });
   
   
   socket.on('createMessage', (data, cb) => {
     if (!data.text) {
-      return cb('Текси не может быть пустым');
+      return cb('Текст не может быть пустым');
     }
     
     const user = users.get(data.id);
@@ -44,16 +45,20 @@ io.on('connection', socket => {
     const user = users.remove(id);
     if (user) {
       io.to(user.room).emit('updateUsers', users.getByRoom(user.room));
-      io.to(user.room).emit('newMessage', m('admin', `Пользователь ${user.name} вышел.`));
+      io.to(user.room).emit(
+        'newMessage',
+        m('admin', `Пользователь ${user.name} вышел.`));
       cb();
     }
   });
   
   socket.on('disconnect', () => {
-    const user = users.get(socket.id);
+    const user = users.remove(socket.id);
     if (user) {
       io.to(user.room).emit('updateUsers', users.getByRoom(user.room));
-      io.to(user.room).emit('newMessage', m(user.name, data.text, data.id));
+      io.to(user.room).emit(
+        'newMessage',
+        m('admin', `Пользователь ${user.name} вышел.`));
     }
   });
   
